@@ -24,9 +24,8 @@ WebpackCordovaPlugin.prototype.apply  = function(compiler){
     /**
      * initialize all values: src, config, platform, version
      */
-    var cwd = process.cwd();
     var src = argv['cordova'] || this.options.src || "index.html";
-    var config = path.join(cwd,argv['cordova-config'] || this.options.config || "config.xml");
+    var config = path.resolve(argv['cordova-config'] || this.options.config || "config.xml");
     var platform = argv['platform'] || this.options.platform;
     var version = argv['cordova-version'] || this.options.version;
 
@@ -53,8 +52,8 @@ WebpackCordovaPlugin.prototype.apply  = function(compiler){
      */
     if(!fs.existsSync(config)){ // sorry for the sync funcion! better ideas are welcome.
       fs.writeFileSync(config, fs.readFileSync(path.join(__dirname,'default-cordova-config.xml')));
-      mkdirp(path.resolve(cwd,'plugins')); // required cordova dir
-      mkdirp(path.resolve(cwd,'www')); // required cordova dir
+      mkdirp(path.resolve(config, '..', 'plugins')); // required cordova dir
+      mkdirp(path.resolve(config, '..', 'www')); // required cordova dir
     }
 
     /**
@@ -104,8 +103,8 @@ WebpackCordovaPlugin.prototype.apply  = function(compiler){
     /**
      * Set correct --content-base for webpack-dev-server
      */
-    var iosPath = path.join(cwd,'platforms','ios','www');
-    var androidPath = path.join(cwd,'platforms','android','assets','www');
+    var iosPath = path.resolve(config, '..', 'platforms','ios','www');
+    var androidPath = path.resolve(config, '..', 'platforms','android','assets','www');
 
     if(platform === "ios" || (platform === undefined && fs.existsSync(iosPath))){
       if(!compiler.options.devServer) compiler.options.devServer = {};
