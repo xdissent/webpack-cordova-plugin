@@ -105,6 +105,7 @@ WebpackCordovaPlugin.prototype.apply  = function(compiler){
      */
     var iosPath = path.resolve(config, '..', 'platforms','ios','www');
     var androidPath = path.resolve(config, '..', 'platforms','android','assets','www');
+    var browserPath = path.resolve(config, '..', 'platforms','browser','www');
 
     if(platform === "ios" || (platform === undefined && fs.existsSync(iosPath))){
       if(!compiler.options.devServer) compiler.options.devServer = {};
@@ -112,6 +113,9 @@ WebpackCordovaPlugin.prototype.apply  = function(compiler){
     } else if(platform === "android" || (platform === undefined && fs.existsSync(androidPath))){
       if(!compiler.options.devServer) compiler.options.devServer = {};
       compiler.options.devServer.contentBase = androidPath;
+    } else if(platform === "browser" || (platform === undefined && fs.existsSync(browserPath))){
+      if(!compiler.options.devServer) compiler.options.devServer = {};
+      compiler.options.devServer.contentBase = browserPath;
     }
 
 };
